@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriSage – Smart Farming Made Easy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="logo">🌿 AgriSage</div>
+    <nav id="nav-links" class="hidden">
+      <a href="#">Home</a>
+      <a href="#">Features</a>
+      <a href="#">Scan Plants</a>
+      <a href="#">Marketplace</a>
+      <a href="SignUp.html" class="btn">Get Started</a>
+    </nav>
+    <div class="hamburger" id="hamburger">☰</div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Smart Farming Made Easy</h1>
+      <p>Scan crops, get instant treatment suggestions, and connect to trusted suppliers — all from your phone.</p>
+      <a href="SignUp.html" class="btn"> Get Started</a>
+    </div>
+    <div class="hero-img">
+      <img src="farmer-illustration.png" alt="Farmer using AgriSage" />
+    </div>
+  </section>
+
+  <!--  Features Section -->
+  <section class="features">
+    <h2>Key Features</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <img src="icons/monitor.png" alt="Monitor" />
+        <h3>Crop Monitoring</h3>
+        <p>Real-time insights from AgriBot and field sensors.</p>
+      </div>
+      <div class="feature">
+        <img src="icons/diagnose.png" alt="Diagnose" />
+        <h3>Disease Detection</h3>
+        <p>Scan plant leaves and get accurate disease diagnosis powered by AI.</p>
+      </div>
+      <div class="feature">
+        <img src="icons/medication.png" alt="Treatment" />
+        <h3>Treatment Suggestions</h3>
+        <p>Know exactly what pesticide, fertilizer, or solution to apply.</p>
+      </div>
+      <div class="feature">
+        <img src="icons/marketplace.png" alt="Marketplace" />
+        <h3>Farm Supplies</h3>
+        <p>Buy the right farm inputs from trusted local suppliers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✅ Footer -->
+  <footer>
+    <p>© 2025 AgriSage. All rights reserved.</p>
+  </footer>
+
+  <!-- ✅ Hamburger Menu JS -->
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('hidden');
+    });
+  </script>
+
+</body>
+</html>
