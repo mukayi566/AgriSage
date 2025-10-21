@@ -1,0 +1,106 @@
+-- Create Database (emoji + multilingual support)
+CREATE DATABASE IF NOT EXISTS agrisage_db
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+USE agrisage_db;
+
+-- USERS
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- CROPS
+CREATE TABLE crops (
+    crop_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(100),
+    disease_status VARCHAR(100),
+    scan_date DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ACTIVITIES
+CREATE TABLE activities (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    activity_type VARCHAR(100),
+    summary VARCHAR(255),
+    payload JSON NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- NOTIFICATIONS
+CREATE TABLE notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT DEFAULT NULL,
+    message VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    type ENUM('alert','weather','market') DEFAULT 'alert',
+    is_read TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- PRODUCTS
+CREATE TABLE products (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    category VARCHAR(100),
+    price DECIMAL(10,2) NOT NULL,
+    stock INT DEFAULT 0,
+    image VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ORDERS
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    total DECIMAL(10,2),
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ORDER ITEMS
+CREATE TABLE order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    product_id INT,
+    quantity INT,
+    unit_price DECIMAL(10,2),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- DRONE SERVICES
+CREATE TABLE drone_services (
+    drone_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    service_type VARCHAR(100),
+    status ENUM('pending','completed') DEFAULT 'pending',
+    scheduled_at DATETIME,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- SAMPLE DATA
+INSERT INTO users (name, email, password) 
+VALUES ('Mukayi Zhou', 'mukayi@example.com', '$2y$10$abcdefghijklmnopqrstuv');
+
+INSERT INTO products (name, category, price, stock) VALUES
+('Mancozeb 80 WP', 'Fungicide', 15.50, 100),
+('Urea Fertilizer', 'Fertilizer', 30.00, 200),
+('Neem Oil Spray', 'Pesticide', 12.00, 50);
+
+INSERT INTO notifications (user_id, message, type) VALUES
+(NULL, '☀️ Hot weather expected tomorrow (31°C)', 'weather'),
+(NULL, '⚠️ Disease outbreak reported in maize crops regionally', 'alert'),
+(NULL, '🛒 New fertilizer available in Marketplace', 'market');
+
+INSERT INTO activities (user_id, activity_type, summary) 
+VALUES (1, 'scan', 'Scanned maize leaf - Rust detected');
